@@ -19,5 +19,5 @@ docker compose up -d --build
 curl -s http://localhost:9000/health
 curl -s -X POST http://localhost:9000/triage \
   -H "Content-Type: application/json" \
-  -d '{"ticket_id":"TCK-1","message":"I was charged twice and need a refund ASAP. Email me at test@example.com"}'
+  -d '{"ticket_id":"TCK-1","message":"I was charged twice and need a refund ASAP. Email me at Chimemekalum@gmail.com.com"}'
 
