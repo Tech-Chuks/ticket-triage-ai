@@ -1,0 +1,51 @@
+services:
+  triton:
+    image: nvcr.io/nvidia/tritonserver:25.05-py3
+    container_name: triton
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    volumes:
+      - ./model-repo:/models
+    command: ["tritonserver", "--model-repository=/models", "--strict-model-config=false"]
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: api
+    environment:
+      - TRITON_HTTP=http://triton:8000
+      - MODEL_NAME=intent_router
+    ports:
+      - "9000:9000"
+    depends_on:
+      - triton
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - api
+      - triton
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana-storage:

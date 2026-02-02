@@ -1,0 +1,18 @@
+{
+  "labels": [
+    "billing",
+    "cancellation",
+    "login",
+    "other",
+    "shipping",
+    "technical"
+  ],
+  "label_to_id": {
+    "billing": 0,
+    "cancellation": 1,
+    "login": 2,
+    "other": 3,
+    "shipping": 4,
+    "technical": 5
+  }
+}
